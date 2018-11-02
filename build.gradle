@@ -1,0 +1,44 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group 'test-log-parser'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+def mainClassName = "com.test.logparser.Application"
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter')
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'mysql:mysql-connector-java'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.0'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}

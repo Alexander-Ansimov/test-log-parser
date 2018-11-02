@@ -1,0 +1,11 @@
+logfile:
+  name: access.log
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_log_test
+    username: root
+    password: admin
