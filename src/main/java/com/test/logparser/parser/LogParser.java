@@ -24,6 +24,7 @@ public class LogParser {
 
     private List<String> readFileByLines(String fileName) {
         log.info("Start reading the log file...");
+
         List<String> logLines;
         Path path = Paths.get(fileName);
         try {
@@ -31,12 +32,14 @@ public class LogParser {
         } catch (IOException e) {
             throw new RuntimeException("Failed to read log file: " + fileName);
         }
+
         log.info("Successfully read log file");
         return logLines;
     }
 
     private List<LogObject> parseToLogObject(List<String> logLines) {
         log.info("Start parsing logs to POJO...");
+
         List<LogObject> logObjects = new ArrayList<>();
         logLines.forEach(line -> {
             String[] values = line.split("\\|");
@@ -50,6 +53,7 @@ public class LogParser {
                         .build());
             }
         });
+
         log.info("Successfully parse logs to POJO");
         return logObjects;
     }

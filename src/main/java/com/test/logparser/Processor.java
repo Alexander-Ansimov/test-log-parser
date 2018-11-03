@@ -13,6 +13,11 @@ import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static com.test.logparser.Application.END_DATE;
+import static com.test.logparser.Application.START_DATE;
+import static com.test.logparser.Application.THRESHOLD;
 
 @Service
 @Slf4j
@@ -30,15 +35,18 @@ public class Processor {
         this.ipRepository = ipRepository;
     }
 
-    @PostConstruct
-    public void process() {
+    public void startProcess(Map<String, String> parameters) {
 
         List<LogObject> logObjects = logParser.readAndParse(logFileName);
+
+        log.info("Start saving logs ito DB...");
         logObjectRepository.saveAll(logObjects);
         log.info("Logs are saved into DB");
 
-        List<String> ips = logObjectRepository.find(Timestamp.valueOf("2017-01-01 00:00:41"),
-                Timestamp.valueOf("2017-01-01 00:50:37"), 10L);
+        List<String> ips = logObjectRepository.find(
+                Timestamp.valueOf(parameters.get(START_DATE)),
+                Timestamp.valueOf(END_DATE),
+                Long.valueOf(parameters.get(THRESHOLD)));
 
         System.out.println("Banned IP's:");
         ips.forEach(System.out::println);
