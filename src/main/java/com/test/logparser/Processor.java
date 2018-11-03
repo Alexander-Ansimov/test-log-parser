@@ -45,7 +45,7 @@ public class Processor {
 
         List<String> ips = logObjectRepository.find(
                 Timestamp.valueOf(parameters.get(START_DATE)),
-                Timestamp.valueOf(END_DATE),
+                Timestamp.valueOf(parameters.get(END_DATE)),
                 Long.valueOf(parameters.get(THRESHOLD)));
 
         System.out.println("Banned IP's:");

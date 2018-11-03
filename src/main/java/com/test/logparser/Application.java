@@ -32,10 +32,10 @@ public class Application implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         Map<String, String> parameters = initParameters(args);
-//        processor.startProcess(parameters);
+        processor.startProcess(parameters);
     }
 
     private Map<String, String> initParameters(ApplicationArguments args) {
@@ -65,22 +65,14 @@ public class Application implements ApplicationRunner {
     }
 
     private String addOneHour(String startDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
-        LocalDateTime startTime = LocalDateTime.parse(startDate, formatter);
-        String resultTime = startTime.plusHours(1).toString();
-
-        System.out.println("ADDED ONE HOUR  ->  " + resultTime);
-
-        return null;
+        LocalDateTime startTime = LocalDateTime.parse(startDate.replace(" ", "T"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return startTime.plusHours(1).format(formatter);
     }
 
     private String addOneDay(String startDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh.mm.ss");
-        LocalDateTime startTime = LocalDateTime.parse(startDate.replace(":", "."), formatter);
-        String resultTime = startTime.plusDays(1).toString();
-
-        System.out.println("ADDED ONE DAY  ->  " + resultTime);
-
-        return null;
+        LocalDateTime startTime = LocalDateTime.parse(startDate.replace(" ", "T"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return startTime.plusDays(1).format(formatter);
     }
 }
