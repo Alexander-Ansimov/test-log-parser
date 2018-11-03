@@ -1,4 +1,4 @@
-package com.test.logparser;
+package com.test.logparser.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
