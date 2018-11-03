@@ -7,8 +7,11 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @SpringBootApplication
@@ -32,7 +35,7 @@ public class Application implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         Map<String, String> parameters = initParameters(args);
-        processor.startProcess(parameters);
+//        processor.startProcess(parameters);
     }
 
     private Map<String, String> initParameters(ApplicationArguments args) {
@@ -47,14 +50,14 @@ public class Application implements ApplicationRunner {
         parameters.put(THRESHOLD, args.getOptionValues(THRESHOLD).get(0));
         enrichEndDate(parameters);
 
-        parameters.forEach((k, v) -> log.info(k + " : " + v + "\n"));
+        parameters.forEach((k, v) -> log.info(k + " : " + v));
         return parameters;
     }
 
     private void enrichEndDate(Map<String, String> parameters) {
-        if (parameters.get(THRESHOLD).equals(DAILY)) {
+        if (parameters.get(DURATION).equals(DAILY)) {
             parameters.put(END_DATE, addOneDay(parameters.get(START_DATE)));
-        } else if (parameters.get(THRESHOLD).equals(HOURLY)) {
+        } else if (parameters.get(DURATION).equals(HOURLY)) {
             parameters.put(END_DATE, addOneHour(parameters.get(START_DATE)));
         } else {
             throw new RuntimeException("In threshold key you can use only 'daily' or 'hourly'");
@@ -62,12 +65,22 @@ public class Application implements ApplicationRunner {
     }
 
     private String addOneHour(String startDate) {
-        //TODO implement this
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(startDate, formatter);
+        String resultTime = startTime.plusHours(1).toString();
+
+        System.out.println("ADDED ONE HOUR  ->  " + resultTime);
+
         return null;
     }
 
     private String addOneDay(String startDate) {
-        //TODO implement this
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh.mm.ss");
+        LocalDateTime startTime = LocalDateTime.parse(startDate.replace(":", "."), formatter);
+        String resultTime = startTime.plusDays(1).toString();
+
+        System.out.println("ADDED ONE DAY  ->  " + resultTime);
+
         return null;
     }
 }
